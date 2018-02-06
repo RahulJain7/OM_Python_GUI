@@ -1,0 +1,1597 @@
+#:import SMatStrm StaticUO.SMatStrm
+#:import SMixer StaticUO.SMixer
+#:import ScrollEffect kivy.effects.scroll.ScrollEffect
+#:import OpacityScrollEffect kivy.effects.opacityscroll.OpacityScrollEffect
+#:import Button kivy.uix.button.Button
+#:import SFlash StaticUO.SFlash
+#:import SSplitter StaticUO.SSplitter
+#:import Graph kivy.garden.graph
+
+<ResizePop>:
+    size_hint:0.6,0.2
+    auto_dismiss: True
+    pos_hint:{'center_x':0.5,'center_y':0.5}
+
+    GridLayout:
+        size_hint:1,1
+        cols:1
+        BoxLayout:
+            size_hint_y:None
+            height:25
+            padding:5
+            canvas:
+                Color:
+                    rgba: 0,0,0,1
+                Line:
+                    rectangle:self.pos[0],self.pos[1],self.size[0],self.size[1]
+                Color:
+                    rgba: 0.6, 0, 0, 1
+                Rectangle:
+                    pos:self.pos
+                    size:self.size
+            Label:
+                size_hint_y:None
+                height:25
+                text_size: self.size
+                text:"Resize Canvas"
+                halign:"center"
+                color:1,1,1,1
+        GridLayout
+            cols:1
+            padding:20
+            GridLayout:
+#                padding:10
+                cols:2
+                spacing:30
+                size_hint_y:None
+                height:40
+                GridLayout:
+                    size_hint_y:None
+                    height:25
+                    cols:2
+                    SLabel:
+                        text:"Width"
+                    STextInput:
+                        id:canvas_height
+                        font_size:12
+                GridLayout:
+                    size_hint_y:None
+                    height:25
+                    cols:2
+                    SLabel:
+                        text:"Height"
+                    STextInput:
+                        id:canvas_width
+                        font_size:12
+            BoxLayout:
+                Label:
+                    size_hint_x:None
+                    width:300
+                SButton:
+                    size_hint_x:None
+                    width:150
+                    id:submit_size
+                    text:"Submit"
+
+
+<LoadDialog>:
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: "vertical"
+        FileChooserIconView:
+            id: filechooser
+
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+            Button:
+                text: "Cancel"
+                on_release: root.cancel()
+
+            Button:
+                text: "Load"
+                on_release: root.load(filechooser.path, filechooser.selection)
+
+<SaveDialog>:
+    text_input: text_input
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: "vertical"
+        FileChooserIconView:
+            id: filechooser
+            on_selection: text_input.text = self.selection and self.selection[0] or ''
+
+        TextInput:
+            id: text_input
+            size_hint_y: None
+            height: 30
+            multiline: False
+
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+            Button:
+                text: "Cancel"
+                on_release: root.cancel()
+
+            Button:
+                text: "Save"
+                on_release: root.save(filechooser.path, text_input.text)
+<CompButton>:
+    size_hint_y:None
+    padding:[10,2]
+    height:25
+    font_size:15
+    text_size: self.size
+    background_normal:''
+    background_color: 0.25,0.25,0.25,1
+    halign:"left"
+
+
+<Remove_Bubble>:
+    size_hint: (None, None)
+    size: (100, 50)
+<ULabel@Label>:
+    size_hint_y:None
+    height:25
+    text_size: self.size
+    halign: 'left'
+    color:0,0,0,1
+<UTextInput@TextInput>:
+    size_hint_y:None
+    height:25
+<UButton@Button>
+    border:0,0,0,0
+    size_hint_y:None
+    size:100,25
+    font_size:15
+    background_normal:''
+    background_color: 0.25,0.25,0.25,1
+    canvas:
+        Color:
+            rgba:0,0,0,1
+        Line:
+            rectangle:self.pos[0],self.pos[1],self.size[0],self.size[1]
+
+<UCheckBox@CheckBox>
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            pos:self.center_x-8, self.center_y-8
+            size:16,16
+    size_hint_x:None
+    width:25
+
+
+<CompPop>:
+    size_hint:0.6,0.2
+    auto_dismiss: True
+    pos_hint:{'center_x':0.5,'center_y':0.5}
+
+    GridLayout:
+        size_hint:1,1
+        cols:1
+        BoxLayout:
+            size_hint_y:None
+            height:25
+            padding:5
+            canvas:
+                Color:
+                    rgba: 0,0,0,1
+                Line:
+                    rectangle:self.pos[0],self.pos[1],self.size[0],self.size[1]
+                Color:
+                    rgba: 0.6, 0, 0, 1
+                Rectangle:
+                    pos:self.pos
+                    size:self.size
+            ULabel:
+                text:"Compound Selection"
+                halign:"center"
+                color:1,1,1,1
+        GridLayout:
+            cols:1
+            padding:15
+            BoxLayout:
+                size_hint:1,0.5
+                MyTextInput:
+                    size_hint_y:None
+                    height:35
+                    id:comp_input
+                    readonly:False
+                    multiline:False
+                    size_hint_x:0.7
+                Button:
+                    size_hint_y:None
+                    height:35
+                    text:'Add'
+                    id:add_comp
+                    size_hint_x:0.3
+            BoxLayout:
+                size_hint:1,0.5
+                Button:
+                    size_hint_y:None
+                    height:35
+                    text:'Show Compounds'
+                    id:show_comp
+                    size_hint_x:0.7
+                Button:
+                    size_hint_y:None
+                    height:35
+                    size_hint_x:0.3
+                    text:'Remove'
+                    id:remove_comp
+
+
+<ThermoPop>:
+
+    size_hint:0.6,0.2
+    auto_dismiss: True
+    pos_hint:{'center_x':0.5,'center_y':0.5}
+
+    GridLayout:
+        size_hint:1,1
+        cols:1
+        BoxLayout:
+            size_hint_y:None
+            height:25
+            padding:5
+            canvas:
+                Color:
+                    rgba: 0,0,0,1
+                Line:
+                    rectangle:self.pos[0],self.pos[1],self.size[0],self.size[1]
+                Color:
+                    rgba: 0.6, 0, 0, 1
+                Rectangle:
+                    pos:self.pos
+                    size:self.size
+            ULabel:
+                text:"VLE Model Selection"
+                halign:"center"
+                color:1,1,1,1
+        GridLayout:
+            cols:1
+            padding:15
+            BoxLayout:
+                size_hint:1,0.5
+                Label:
+                    id:present_model
+#                Button:
+#                    size_hint_y:None
+#                    height:35
+#                    text:'Add'
+#                    id:add_comp
+#                    size_hint_x:0.3
+            BoxLayout:
+                size_hint:1,0.5
+                Button:
+                    size_hint_y:None
+                    height:35
+                    text:'Show VLE Models'
+                    id:show_vle
+                    size_hint_x:0.7
+
+
+
+<BinaryEnvelope>:
+    size_hint:(0.7,0.7)
+    width:750
+    pos_hint:{'center_x':0.5,'center_y':0.5}
+#    background:''
+#    canvas:
+#        Color:
+#            rgba: 0.8, 0.8, 0.8, 1
+#        Rectangle:
+#            pos:self.pos
+#            size:self.size
+    GridLayout:
+        size_hint:1,1
+        cols:1
+        BoxLayout:
+            size_hint_y:None
+            height:25
+            padding:5
+            canvas:
+                Color:
+                    rgba: 0,0,0,1
+                Line:
+                    rectangle:self.pos[0],self.pos[1],self.size[0],self.size[1]
+                Color:
+                    rgba: 0.6, 0, 0, 1
+                Rectangle:
+                    pos:self.pos
+                    size:self.size
+            ULabel:
+                text:"Binary Plotter"
+                halign:"center"
+                color:1,1,1,1
+        BoxLayout:
+            orientation:'vertical'
+            padding:15
+            size_hint:1,1
+            StackLayout:
+                spacing:8
+                orientation:'lr-tb'
+                size_hint:1,0.1
+                Label:
+                    text_size: self.size
+                    halign: 'left'
+                    color:1,1,1,1
+                    size_hint:0.2,None
+                    size:0,25
+                    text:'Name'
+                TextInput:
+                    size_hint:0.8,None
+                    size: 0,25
+                    text_size: self.size
+                    font_size: 11
+                Label:
+                    text_size: self.size
+                    halign: 'left'
+                    color:1,1,1,1
+                    size_hint:0.2,None
+                    size:0,25
+                    text:'Attached to'
+                TextInput:
+                    size_hint:0.8,None
+                    size: 0,25
+                    font_size:11
+                    text_size: self.size
+            BoxLayout:
+                size_hint:1,0.5
+                spacing:5
+                BoxLayout:
+                    canvas:
+                        Color:
+                            rgba: 0,0,0,1
+                        Line:
+                            rectangle:self.pos[0],self.pos[1],self.size[0],self.size[1]
+                        Color:
+                            rgba: 0.6, 0.6, 0.6, 1
+                        Rectangle:
+                            pos:self.pos
+                            size:self.size
+                    size_hint_x:0.5
+                    ScrollView:
+
+                        BoxLayout:
+                            size_hint_y:None
+                            size:(0,300)
+                            orientation:"vertical"
+                            BoxLayout:
+                                size_hint_y:None
+                                height:25
+                                padding:5
+                                canvas:
+                                    Color:
+                                        rgba: 0,0,0,1
+                                    Line:
+                                        rectangle:self.pos[0],self.pos[1],self.size[0],self.size[1]
+                                    Color:
+                                        rgba: 0.6, 0, 0, 1
+                                    Rectangle:
+                                        pos:self.pos
+                                        size:self.size
+                                ULabel:
+                                    text:"Diagram Settings"
+                                    halign:"center"
+                                    color:1,1,1,1
+                            GridLayout:
+                                cols:2
+                                spacing:8
+                                padding:5,15
+                                ULabel:
+                                    text:"Compound 1"
+                                UButton:
+                                    text:"Select"
+                                    id:compound_1
+                                ULabel:
+                                    text:"Compound 2"
+                                UButton:
+                                    text:"Select"
+                                    id:compound_2
+                                ULabel:
+                                    text:"Envelope type"
+                                BoxLayout:
+                                    size_hint_y:None
+                                    size:0,20
+                                    spacing:5
+
+                                    UCheckBox:
+                                        width:15
+                                    ULabel:
+                                        text:"Txy"
+                                        size_hint_x:None
+                                        width:25
+                                        font_size:12
+                                    UCheckBox:
+                                        width:15
+                                    ULabel:
+                                        text:"Pxy"
+                                        size_hint_x:None
+                                        width:25
+                                        font_size:12
+                                    UCheckBox:
+                                        width:15
+                                    ULabel:
+                                        text:"(T)xy"
+                                        size_hint_x:None
+                                        width:30
+                                        font_size:12
+                                    UCheckBox:
+                                        width:15
+                                    ULabel:
+                                        text:"(P)xy"
+                                        size_hint_x:None
+                                        width:30
+                                        font_size:12
+    #                            ULabel:
+    #                                text:"Txy Diagram Options"
+    #                            BoxLayout:
+    #                                size_hint_y:None
+    #                                size:0,25
+    #                                UCheckBox:
+    #                                ULabel:
+    #                                    text:"VLE"
+    #                                    font_size:12
+    #                                UCheckBox:
+    #                                ULabel:
+    #                                    text:"LLE"
+    #                                    font_size:12
+    #                            ULabel:
+    #                                text:""
+    #                            BoxLayout:
+    #                                size_hint_y:None
+    #                                size:0,25
+    #                                UCheckBox:
+    #
+    #                                ULabel:
+    #                                    size_hint_x:None
+    #                                    width:30
+    #                                    text:"SLE"
+    #                                    font_size:12
+    #                            ULabel:
+    #                                text:""
+    #                            BoxLayout:
+    #                                size_hint_y:None
+    #                                size:0,25
+    #                                UCheckBox:
+    #
+    #                                ULabel:
+    #                                    size_hint_x:None
+    #                                    width:300
+    #                                    text:"Critical Line"
+    #                                    font_size:12
+    #                            ULabel:
+    #                                text:"X Axis Basis"
+    #                            UButton:
+    #                                text:"Select"
+                                ULabel:
+                                    text:"Pressure"
+                                UTextInput:
+                                    id:Pressure
+    #                            ULabel:
+    #                                text:"Temperature"
+    #                            UTextInput:
+                                ULabel:
+                                    text:"Property Package"
+                                UButton:
+                                    text:"UNIQUAC"
+                                    id:property_package
+                            BoxLayout:
+                                size_hint_y:None
+                                height:55
+                                size_hint_x:1
+                                Label:
+                                    size_hint_x:0.1
+                                UButton:
+                                    size_hint_x:0.5
+                                    id:calculate
+                                    text:"Calculate"
+                                Label:
+                                    size_hint_x:0.1
+
+
+
+
+                BoxLayout:
+                    size_hint_x:0.5
+                    orientation:'vertical'
+                    canvas:
+                        Color:
+                            rgba: 0,0,0,1
+                        Line:
+                            rectangle:self.pos[0],self.pos[1],self.size[0],self.size[1]
+                        Color:
+                            rgba: 0.6, 0.6, 0.6, 1
+                        Rectangle:
+                            pos:self.pos
+                            size:self.size
+                    BoxLayout:
+                        size_hint_y:None
+                        height:25
+                        padding:5
+                        canvas:
+                            Color:
+                                rgba: 0,0,0,1
+                            Line:
+                                rectangle:self.pos[0],self.pos[1],self.size[0],self.size[1]
+                            Color:
+                                rgba: 0.6, 0, 0, 1
+                            Rectangle:
+                                pos:self.pos
+                                size:self.size
+                        ULabel:
+                            text:"Results"
+                            color:1,1,1,1
+                            halign:"center"
+                    BoxLayout:
+                        size_hint_y:1
+                        Graph:
+                            id:graph
+                            xlabel:'No. of moles'
+                            ylabel:'T'
+                            x_ticks_major:0.1
+                            y_ticks_major:20
+                            y_grid_label:True
+                            x_grid_label:True
+                            padding:5
+                            x_grid:True
+                            y_grid:True
+                            xmin:0
+                            xmax:1
+                            ymin:0
+                            ymax:300
+
+
+
+
+
+<UtilityPopUp>:
+    size_hint:(0.7,0.5)
+    width:750
+    padding:20
+    spacing:20
+    background:''
+    canvas:
+        Color:
+            rgba: 0,0,0,1
+        Line:
+            rectangle:self.pos[0],self.pos[1],self.size[0],self.size[1]
+        Color:
+            rgba: 0.8, 0.8, 0.8, 1
+        Rectangle:
+            pos:self.pos
+            size:self.size
+    BoxLayout:
+        spacing:8
+        orientation:'vertical'
+        BoxLayout:
+            size_hint:(1,0.1)
+            canvas:
+                Color:
+                    rgba: 0.5, 0.5, 0.5, 1
+                Rectangle:
+                    pos:self.pos
+                    size:self.size
+            Label:
+                text:'Add an Utility and associate it with an object on the flowsheet'
+                color: 0,0,0,1
+
+        BoxLayout:
+            size_hint:(1,0.8)
+            spacing:8
+            orientation:'vertical'
+            BoxLayout:
+                spacing:8
+                size_hint:1,0.1
+                canvas:
+                    Color:
+                        rgba: 0.8, 0.8, 0.8, 1
+                    Rectangle:
+                        pos:self.pos
+                        size:self.size
+                Label:
+                    text_size: self.size
+                    color: 0,0,0,1
+                    halign: 'left'
+                    size_hint:(0.25,1)
+                    text:"Object Type:"
+                Label:
+                    text_size: self.size
+                    halign: 'left'
+                    color: 0,0,0,1
+                    size_hint:(0.375,1)
+                    text:"Utility Type:"
+                Label:
+                    text_size: self.size
+                    color: 0,0,0,1
+                    halign: 'left'
+                    size_hint:(0.375,1)
+                    text:"Flowsheet Object:"
+            BoxLayout:
+                spacing:8
+                size_hint:1,0.9
+                canvas:
+                    Color:
+                        rgba: 0.8, 0.8, 0.8, 1
+                    Rectangle:
+                        pos:self.pos
+                        size:self.size
+                StackLayout:
+                    size_hint:(0.25,1)
+                    orientation:'tb-lr'
+                    padding:7,4
+                    canvas:
+                        Color:
+                            rgba: 0,0,0,1
+                        Line:
+                            rectangle:self.pos[0],self.pos[1],self.size[0],self.size[1]
+                        Color:
+                            rgba: 1, 1, 1, 1
+                        Rectangle:
+                            pos:self.pos
+                            size:self.size
+                    Button:
+                        text:"Material Stream"
+                        font_size:12
+                        text_size: self.size
+                        halign: 'left'
+                        size_hint:(1,None)
+                        size:(0,20)
+                        background_normal:' '
+                        background_color:1,1,1,0
+                        color:0,0,0,1
+                    Button:
+                        text:"Separator Vessels"
+                        font_size:12
+                        text_size: self.size
+                        halign: 'left'
+                        size_hint:(1,None)
+                        size:(0,20)
+                        background_normal:' '
+                        background_color:1,1,1,0
+                        color:0,0,0,1
+                    Button:
+                        text:"Valves"
+                        font_size:12
+                        size_hint:(1,None)
+                        text_size: self.size
+                        halign: 'left'
+                        size:(0,20)
+                        background_normal:' '
+                        background_color:1,1,1,0
+                        color:0,0,0,1
+                StackLayout:
+                    size_hint:(0.375,1)
+                    orientation:'tb-lr'
+                    padding:7,4
+                    canvas:
+                        Color:
+                            rgba: 0,0,0,1
+                        Line:
+                            rectangle:self.pos[0],self.pos[1],self.size[0],self.size[1]
+                        Color:
+                            rgba: 1, 1, 1, 1
+                        Rectangle:
+                            pos:self.pos
+                            size:self.size
+                    Button:
+                        text:"Binary phase Envelope"
+                        font_size:12
+                        size_hint:(1,None)
+                        text_size: self.size
+                        halign: 'left'
+                        size:(0,20)
+                        background_normal:' '
+                        background_color:1,1,1,0
+                        color:0,0,0,1
+                StackLayout:
+                    size_hint:(0.375,1)
+                    canvas:
+                        Color:
+                            rgba: 0,0,0,1
+                        Line:
+                            rectangle:self.pos[0],self.pos[1],self.size[0],self.size[1]
+                        Color:
+                            rgba: 1, 1, 1, 1
+                        Rectangle:
+                            pos:self.pos
+                            size:self.size
+
+        BoxLayout:
+            size_hint:(1,0.1)
+            canvas:
+                Color:
+                    rgba: 0.8, 0.8, 0.8, 1
+                Rectangle:
+                    pos:self.pos
+                    size:self.size
+            BoxLayout:
+                size_hint:(0.7,1)
+            BoxLayout:
+                spacing:8
+                size_hint:(0.3,1)
+                Button:
+                    text:'Cancel'
+                Button:
+                    id:add_utility
+                    text:'Add utility'
+
+
+<SLabel@Label>:
+    size_hint_y:None
+    height:25
+    text_size: self.size
+    halign: 'left'
+<STextInput@TextInput>:
+    size_hint_y:None
+    height:25
+
+<SButton@Button>
+    border:0,0,0,0
+    size_hint_y:None
+    size:100,25
+    font_size:15
+    background_normal:''
+    background_color: 0.25,0.25,0.25,1
+    canvas:
+        Color:
+            rgba:0,0,0,1
+        Line:
+            rectangle:self.pos[0],self.pos[1],self.size[0],self.size[1]
+
+<SCheckBox@CheckBox>
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            pos:self.center_x-8, self.center_y-8
+            size:16,16
+<SPopUp>:
+    size_hint:(0.5,0.25)
+    auto_dismiss: False
+    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    GridLayout:
+        size_hint:1,1
+        cols:1
+        BoxLayout:
+            size_hint_y:None
+            height:25
+            padding:5
+            canvas:
+                Color:
+                    rgba: 0,0,0,1
+                Line:
+                    rectangle:self.pos[0],self.pos[1],self.size[0],self.size[1]
+                Color:
+                    rgba: 0.6, 0, 0, 1
+                Rectangle:
+                    pos:self.pos
+                    size:self.size
+            ULabel:
+                text:"Simulation Progress"
+                halign:"center"
+                color:1,1,1,1
+        FloatLayout:
+            ProgressBar:
+                id:ProgBar
+                size_hint: 0.8,0.6
+                pos_hint: {'center_x': 0.5, 'center_y': 0.4}
+                value: 50
+                max: 100
+            Label:
+                id:sim_status
+                color:1,1,1,1
+                text: 'Loading...'
+                size_hint: 1,0.6
+                pos_hint: {'center_x': 0.5, 'center_y': 0.7}
+            Button:
+                id:dismiss_progress
+                text:"close"
+                pos_hint: {'center_x': 0.5, 'center_y': 0.2}
+                size_hint_y:None
+                height:30
+                size_hint_x:None
+                width:100
+
+<SSPopUp>:
+    id:popup
+    size_hint:(0.6,0.7)
+    pos_hint:{'center_x': 0.5, 'center_y': 0.5}
+    auto_dismiss: True
+    GridLayout:
+        size_hint:1,1
+        cols:1
+        BoxLayout:
+            size_hint_y:None
+            height:25
+            padding:5
+            canvas:
+                Color:
+                    rgba: 0,0,0,1
+                Line:
+                    rectangle:self.pos[0],self.pos[1],self.size[0],self.size[1]
+                Color:
+                    rgba: 0.6, 0, 0, 1
+                Rectangle:
+                    pos:self.pos
+                    size:self.size
+            ULabel:
+                text:"Simulation Settings"
+                halign:"center"
+                color:1,1,1,1
+        GridLayout:
+            cols:1
+            spacing:10
+            BoxLayout:
+                size_hint: 1,0.8
+                padding:10,0
+                TabbedPanel:
+                    pos_hint: {'top':1}
+                    do_default_tab: False
+                    tab_width: 130
+                    tab_height: 30
+
+                    TabbedPanelItem:
+                        background_color:0.6,0,0,1
+                        background_normal:""
+#                        background_down:"Images/flash_new.png"
+                        border:0,0,0,0
+                        background_image:""
+                        text: 'General'
+                        font_size:12
+                        ScrollView:
+                            size_hint:1,1
+                            BoxLayout:
+                                padding:10
+                                spacing:5
+                                size_hint:1,None
+    #                            height: sum(x.height for x in self.children)
+                                size:(1000,700)
+                                orientation: 'vertical'
+                                canvas:
+                                    Color:
+                                        rgba: 0.4, 0.4, 0.4, 1
+                                    Rectangle:
+                                        pos:self.pos
+                                        size:self.size
+                                    Color:
+                                        rgba:0,0,0,1
+                                    Line:
+                                        rectangle:self.pos[0],self.pos[1],self.size[0],self.size[1]
+                                SLabel:
+                                    text: "Simulation Interval"
+                                    size_hint_y:None
+                                    height:25
+                                    halign: 'center'
+                                GridLayout:
+                                    padding:5
+                                    spacing:5
+                                    id:sim_scroll
+                                    cols:2
+                                    size_hint_y:None
+                                    size:0,120
+                                    canvas:
+                                        Color:
+                                            rgba: 0.25, 0.25, 0.25, 1
+                                        Rectangle:
+                                            pos:self.pos
+                                            size:self.size
+                                        Color:
+                                            rgba:0,0,0,1
+                                        Line:
+                                            rectangle:self.pos[0],self.pos[1],self.size[0],self.size[1]
+                                    SLabel:
+                                        text: "Start Time: "
+                                        size_hint_y:None
+                                        height:25
+                                    STextInput:
+                                        id:start_time
+                                        text:"0.0"
+                                        size_hint_y:None
+                                        height:25
+                                        readonly:True
+                                        font_size:12
+                                        multiline:False
+                                    SLabel:
+                                        text: "Stop Time: "
+                                    STextInput:
+                                        id:stop_time
+                                        text:"1.0"
+                                        readonly:True
+                                        size_hint_y:None
+                                        font_size:12
+                                        multiline:False
+                                    SButton:
+                                        id: interval_type
+                                        text:"Number of intervals"
+                                    STextInput:
+                                        id:interval
+                                        text:"1"
+                                        readonly:True
+                                        size_hint_y:None
+                                        font_size:12
+                                        multiline:False
+                                        valign:'center'
+                                SLabel:
+                                    text: "Integration"
+                                    halign: 'center'
+                                GridLayout:
+                                    padding:5
+                                    spacing:5
+                                    cols:2
+                                    size_hint_y:None
+                                    size:0,280
+                                    canvas:
+                                        Color:
+                                            rgba: 0.25, 0.25, 0.25, 1
+                                        Rectangle:
+                                            pos:self.pos
+                                            size:self.size
+                                        Color:
+                                            rgba:0,0,0,1
+                                        Line:
+                                            rectangle:self.pos[0],self.pos[1],self.size[0],self.size[1]
+                                    SLabel:
+                                        text: "Method"
+                                    SButton:
+                                        id: method
+                                        text:"dassl"
+                                    SLabel:
+                                        text: "Tolerance"
+                                    STextInput:
+                                        id:tolerance
+                                        text:"1e-06"
+                                        size_hint_y:None
+                                        readonly:True
+                                        font_size:12
+                                        multiline:False
+                                    SLabel:
+                                        text: "Jacobian"
+                                    SButton:
+                                        id: output
+                                        text:"Select"
+                                    SLabel:
+                                        text: "DASSL/IDA Options"
+                                    SLabel:
+                                        text: " "
+                                    SCheckBox:
+                                        size_hint_y:None
+                                        height:25
+                                        id: root_finding
+                                        active: True
+
+                                    SLabel:
+                                        text: "Root Finding"
+                                    SCheckBox:
+                                        size_hint_y:None
+                                        height:25
+                                        id: restart_after_event
+                                    SLabel:
+                                        text: "Restart after Event"
+                                    SLabel:
+                                        text: "Initial Step Size"
+                                    STextInput:
+                                        id: initial_step_size
+                                        size_hint_y:None
+
+
+                                        font_size:12
+                                        multiline:False
+                                    SLabel:
+                                        text: "Maximum Step Size"
+                                    STextInput:
+                                        id: maximum_step_size
+                                        size_hint_y:None
+
+
+                                        font_size:12
+                                        multiline:False
+                                    SLabel:
+                                        text: "Maximum Integration Order"
+                                    STextInput:
+                                        id: maximum_integration_order
+                                        size_hint_y:None
+                                        font_size:12
+                                        multiline:False
+                                GridLayout:
+                                    cols:2
+                                    padding:5
+                                    spacing:5
+                                    canvas:
+                                        Color:
+                                            rgba: 0.25, 0.25, 0.25, 1
+                                        Rectangle:
+                                            pos:self.pos
+                                            size:self.size
+                                        Color:
+                                            rgba:0,0,0,1
+                                        Line:
+                                            rectangle:self.pos[0],self.pos[1],self.size[0],self.size[1]
+                                    SLabel:
+                                        text: "Compiler Flags (Optional)"
+                                    STextInput:
+                                        id: compiler_flags
+                                        size_hint_y:None
+
+
+                                        font_size:12
+                                        multiline:False
+                                    SLabel:
+                                        text: "No of Processors "
+                                    STextInput:
+                                        id: no_of_processors
+                                        size_hint_y:None
+                                        font_size:12
+                                        multiline:False
+                                    SCheckBox:
+                                        id: build_only
+                                        size_hint_y:None
+                                        height:25
+                                    SLabel:
+                                        text: "Build Only"
+                                    SCheckBox:
+                                        id: launch_transformatonal_debugger
+                                        size_hint_y:None
+                                        height:25
+                                    SLabel:
+                                        text: "Launch Transformational Debugger"
+                                    SCheckBox:
+                                        id: launch_algorithmic_debugger
+                                        size_hint_y:None
+                                        height:25
+                                    SLabel:
+                                        text: "Launch Algorithmic Debugger"
+                                    SCheckBox:
+                                        id: launch_animation
+                                        size_hint_y:None
+                                        height:25
+                                    SLabel:
+                                        text: "Launch Animation"
+                    TabbedPanelItem:
+                        text: 'Output'
+                        font_size:12
+                        background_color:0.6,0,0,1
+                        background_normal:""
+                        background_image:""
+                        ScrollView:
+                            size_hint:1,1
+                            BoxLayout:
+                                size_hint_y:None
+                                height:270
+                                orientation: 'vertical'
+                                padding:10
+                                spacing:5
+                                canvas:
+                                    Color:
+                                        rgba: 0.4, 0.4, 0.4, 1
+                                    Rectangle:
+                                        pos:self.pos
+                                        size:self.size
+                                GridLayout:
+                                    spacing:5
+                                    padding:5
+                                    canvas:
+                                        Color:
+                                            rgba: 0.25, 0.25, 0.25, 1
+                                        Rectangle:
+                                            pos:self.pos
+                                            size:self.size
+                                        Color:
+                                            rgba:0,0,0,1
+                                        Line:
+                                            rectangle:self.pos[0],self.pos[1],self.size[0],self.size[1]
+                                    cols:2
+                                    SLabel:
+                                        text: "Output Format"
+                                    SButton:
+                                        id: output2
+                                        text:"Select"
+                                    SLabel:
+                                        text: "File Name Prefix (Optional)"
+                                    STextInput:
+                                        id:file_name_prefix
+                                        size_hint_y:None
+
+
+                                        font_size:12
+                                        multiline:False
+                                    SLabel:
+                                        text: "Result File (Optional)"
+                                    STextInput:
+                                        id:result_file
+                                        size_hint_y:None
+
+
+                                        font_size:12
+                                        multiline:False
+                                    SLabel:
+                                        text: "Variable Filter (Optional)"
+                                    STextInput:
+                                        id:variable_filter
+                                        size_hint_y:None
+
+
+                                        font_size:12
+                                        multiline:False
+                                    SCheckBox:
+                                        id: protected_variables
+                                        active: False
+                                    SLabel:
+                                        text: "Protected Variables"
+                                    SCheckBox:
+                                        id: equidistant_time_grid
+                                        active: True
+                                    SLabel:
+                                        text: "Equidistant Time Grid"
+                                    SCheckBox:
+                                        id: store_variables_at_events
+                                        active: True
+                                    SLabel:
+                                        text: "Store Variables at Events"
+                                    SCheckBox:
+                                        id:show_generated_files
+                                    SLabel:
+                                        text: "Show Generated Files"
+            FloatLayout:
+                height:50
+                size_hint_y:None
+                orientation:'horizontal'
+                padding:10
+                Button:
+                    pos_hint:{'center_x':0.5,'center_y':0.7}
+                    size_hint_y:None
+                    size_hint_x:None
+                    width:250
+                    height:40
+                    id: Sim_But
+                    text: "SIMULATE"
+                    background_normal:''
+                    background_color: 0.25,0.25,0.25,1
+                    canvas:
+                        Color:
+                            rgba:0,0,0,1
+                        Line:
+                            rectangle:self.pos[0],self.pos[1],self.size[0],self.size[1]
+
+
+
+<MenuButton>
+    size_hint_y:None
+    height:20
+    background_normal:''
+    background_down:''
+    background_color:(0.1,0.1,0.1,1)
+    halign:'left'
+    size_hint_x:None
+    width:300
+    padding:[10,2]
+    border:(0,0,0,0)
+<MButton@Button>:
+    size_hint_x:None
+    background_normal:''
+    background_down:''
+    color:0.5,0.5,0.5,1
+    border:0,0,0,0
+    background_color:(0.1,0.1,0.1,0.7)
+<M2Button@Button>:
+    size_hint_x:None
+    background_normal:''
+    background_color:(0.2,0.2,0.2,0.7)
+    border:0,0,0,0
+
+
+<OmWidget>:
+    GridLayout:
+        cols:1
+        spacing:2.3
+        size_hint_y:None
+        size_hint:(1,1)
+        size:(1300,900)
+        id:main
+        pos_hint:{'center_x': .5, 'center_y': .5}
+        canvas:
+            Color:
+#                rgb: 47 / 255., 167 / 255., 212 / 255., 1.
+                rgba:0,0,0,1
+            Rectangle:
+                pos:self.pos
+                size:self.size
+        BoxLayout:
+            size_hint_y:None
+            size:(0,30)
+            canvas:
+                Color:
+                    rgb: 0.1,0.1,0.1
+                Rectangle:
+                    pos:self.pos
+                    size:self.size
+            MButton:
+                width:40
+                text:'File'
+                color:1,1,1,1
+                on_release:root.filedropdown.open(*args)
+            MButton:
+                width:40
+                text:'Edit'
+#                on_release:root.editdropdown.open(*args)
+            MButton:
+                width:60
+                text:'Insert'
+#                on_release:root.insertdropdown.open(*args)
+            MButton:
+                width:50
+                text:'Tools'
+#                on_release:root.toolsdropdown.open(*args)
+            MButton:
+                width:70
+                text:'Utilities'
+                on_release:root.utilitiesdropdown.open(*args)
+                color:1,1,1,1
+            MButton:
+                width:100
+                text:'Optimization'
+#                on_release:root.optimizationdropdown.open(*args)
+            MButton:
+                width:70
+                text:'Scripts'
+#                on_release:root.scriptsdropdown.open(*args)
+            MButton:
+                width:70
+                text:'Results'
+#                on_release:root.resultsdropdown.open(*args)
+            MButton:
+                width:70
+                text:'Plugins'
+#                on_release:root.pluginsdropdown.open(*args)
+            MButton:
+                width:70
+                text:'Windows'
+                on_release:root.windowsdropdown.open(*args)
+                color:1,1,1,1
+            MButton:
+                width:40
+                text:'View'
+#                on_release:root.viewdropdown.open(*args)
+            MButton:
+                width:40
+                text:'Help'
+#                on_release:root.helpdropdown.open(*args)
+        BoxLayout:
+            size_hint_y: None
+            size:(0, 30)
+            canvas:
+                Color:
+                    rgb: 0.2,0.2,0.2,1
+                Rectangle:
+                    pos:self.pos
+                    size:self.size
+            BoxLayout:
+                size_hint_x:0.5
+                M2Button:
+                    width:130
+                    text:'Compounds'
+                    on_press:root.CompPop(*args)
+                M2Button:
+                    width:150
+                    text:'Thermodynamics'
+                    on_press:root.ThermoPop(*args)
+            StackLayout:
+                orientation: 'rl-tb'
+                size_hint_y: None
+                size_hint_x:0.5
+                size:(0, 30)
+                M2Button:
+                    text: 'SEQ'
+                    width:50
+                    on_press: root.Seq_Mod(*args)
+                M2Button:
+                    text: 'EQN'
+                    width:50
+                    on_press: root.Eqn_Orin(*args)
+
+        FloatLayout:
+            size_y_hint: None
+            id:box_cover
+            ScrollView:
+                bar_width:5
+                bar_color:0.6,0,0,0.5
+                effect_cls: ScrollEffect
+                size_hint:(None,1)
+                width:root.width - 150
+                pos_hint:{'top':1,'x':0}
+                id:scroll
+                FloatLayout:
+                    id:b1
+                    size_hint:(None,None)
+                    size:1500,1500
+                    canvas.before:
+                        Color:
+                            rgba: (0.9,0.9,0.9,1)
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos
+
+
+
+            StackLayout:
+                id:shelf
+                orientation:'tb-lr'
+                size_hint:(None,None)
+                height:90
+                width:45
+                pos_hint:{'top':1,'x':0}
+                spacing:5
+                padding:5,5
+                canvas:
+                    Color:
+                        rgba: 0,0,0,1
+                    Line:
+                        rectangle:self.pos[0],self.pos[1],self.size[0],self.size[1]
+
+
+                canvas.before:
+                    Color:
+                        rgba: (0.2,0.2,0.2,1)
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+                Button:
+                    id:cursor_toggle
+                    background_normal:"Images/cursor.png"
+                    border:0,0,0,0
+                    background_down:'Images/cursor.png'
+                    size_hint:1,None
+                    height:35
+                    canvas.before:
+                        Color:
+                            rgba: 0,0,0,1
+                        Line:
+                            rectangle:self.pos[0],self.pos[1],self.size[0],self.size[1]
+                        Color:
+                            rgba: (0.6,0.6,0.6,1)
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos
+                    on_press:root.select_cursor()
+                Button:
+                    id:hand_toggle
+                    background_normal:"Images/hand.png"
+                    border:0,0,0,0
+                    background_down:'Images/hand.png'
+                    size_hint:1,None
+                    height:35
+                    canvas.before:
+                        Color:
+                            rgba: 0,0,0,1
+                        Line:
+                            rectangle:self.pos[0],self.pos[1],self.size[0],self.size[1]
+                        Color:
+                            rgba: (0.6,0.6,0.6,1)
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos
+                    on_press:root.select_hand()
+            ScrollView:
+                size_hint_y:1
+                size_hint_x:None
+                width:150
+                pos_hint:{'right':1}
+                id:scroll_shelf
+                BoxLayout:
+                    pos_hint:{'right':1}
+                    size_hint:(None,None)
+                    height:850
+                    width:150
+                    id:unit_shelf
+                    orientation:'vertical'
+                    canvas:
+                        Color:
+                            rgb: 0.2,0.2,0.2
+                        Rectangle:
+                            pos:self.pos
+                            size:self.size
+                    GridLayout:
+                        cols:1
+                        size_hint_x:None
+                        width:150
+                        padding:5
+                        spacing:5
+                        canvas:
+                            Color:
+                                rgba: 0,0,0,1
+                            Line:
+                                rectangle:self.pos[0],self.pos[1],self.size[0],self.size[1]
+                            Color:
+                                rgba: 0.2, 0.2, 0.2, 1
+                            Rectangle:
+                                pos:self.pos
+                                size:self.size
+                        BoxLayout:
+                            size_hint_x:1
+                            size_hint_y:None
+                            height:128
+                            orientation:'vertical'
+                            canvas:
+                                Color:
+                                    rgba: 0,0,0,1
+                                Line:
+                                    rectangle:self.pos[0],self.pos[1],self.size[0],self.size[1]
+                                Color:
+                                    rgba: 0.7, 0.7, 0.7, 1
+                                Rectangle:
+                                    pos:self.pos
+                                    size:self.size
+                            BoxLayout:
+                                size_hint_x:1
+                                size_hint_y:None
+                                height:25
+                                canvas:
+                                    Color:
+                                        rgba: 0,0,0,1
+                                    Line:
+                                        rectangle:self.pos[0],self.pos[1],self.size[0],self.size[1]
+                                    Color:
+                                        rgba: 0.6, 0, 0, 1
+                                    Rectangle:
+                                        pos:self.pos
+                                        size:self.size
+                                ULabel:
+                                    color:1,1,1,1
+                                    text:"Mixer"
+                                    halign:"center"
+                            SMixer:
+                                id:mixer
+
+                        BoxLayout:
+                            size_hint_x:1
+                            size_hint_y:None
+                            height:115
+                            orientation:'vertical'
+                            canvas:
+                                Color:
+                                    rgba: 0,0,0,1
+                                Line:
+                                    rectangle:self.pos[0],self.pos[1],self.size[0],self.size[1]
+                                Color:
+                                    rgba: 0.7, 0.7, 0.7, 1
+                                Rectangle:
+                                    pos:self.pos
+                                    size:self.size
+                            BoxLayout:
+                                size_hint_x:1
+                                size_hint_y:None
+                                height:25
+                                canvas:
+                                    Color:
+                                        rgba: 0,0,0,1
+                                    Line:
+                                        rectangle:self.pos[0],self.pos[1],self.size[0],self.size[1]
+                                    Color:
+                                        rgba: 0.6, 0, 0, 1
+                                    Rectangle:
+                                        pos:self.pos
+                                        size:self.size
+                                ULabel:
+                                    color:1,1,1,1
+                                    text:"Material Stream"
+                                    halign:"center"
+                            SMatStrm:
+                                id:mat_strm
+                        BoxLayout:
+                            size_hint_x:1
+                            size_hint_y:None
+                            height:128
+                            orientation:'vertical'
+                            canvas:
+                                Color:
+                                    rgba: 0,0,0,1
+                                Line:
+                                    rectangle:self.pos[0],self.pos[1],self.size[0],self.size[1]
+                                Color:
+                                    rgba: 0.7, 0.7, 0.7, 1
+                                Rectangle:
+                                    pos:self.pos
+                                    size:self.size
+                            BoxLayout:
+                                size_hint_x:1
+                                size_hint_y:None
+                                height:25
+                                canvas:
+                                    Color:
+                                        rgba: 0,0,0,1
+                                    Line:
+                                        rectangle:self.pos[0],self.pos[1],self.size[0],self.size[1]
+                                    Color:
+                                        rgba: 0.6, 0, 0, 1
+                                    Rectangle:
+                                        pos:self.pos
+                                        size:self.size
+                                ULabel:
+                                    color:1,1,1,1
+                                    text:"Flash"
+                                    halign:"center"
+                            SFlash:
+                                id:flash
+                        BoxLayout:
+                            size_hint_x:1
+                            size_hint_y:None
+                            height:155
+                            orientation:'vertical'
+                            canvas:
+                                Color:
+                                    rgba: 0,0,0,1
+                                Line:
+                                    rectangle:self.pos[0],self.pos[1],self.size[0],self.size[1]
+                                Color:
+                                    rgba: 0.7, 0.7, 0.7, 1
+                                Rectangle:
+                                    pos:self.pos
+                                    size:self.size
+                            BoxLayout:
+                                size_hint_x:1
+                                size_hint_y:None
+                                height:25
+                                canvas:
+                                    Color:
+                                        rgba: 0,0,0,1
+                                    Line:
+                                        rectangle:self.pos[0],self.pos[1],self.size[0],self.size[1]
+                                    Color:
+                                        rgba: 0.6, 0, 0, 1
+                                    Rectangle:
+                                        pos:self.pos
+                                        size:self.size
+                                ULabel:
+                                    color:1,1,1,1
+                                    text:"Splitter"
+                                    halign:"center"
+                            SSplitter:
+                                id:splitter
+                        BoxLayout:
+                            size_hint_x:1
+                            size_hint_y:None
+                            height:155
+                            orientation:'vertical'
+                            canvas:
+                                Color:
+                                    rgba: 0,0,0,1
+                                Line:
+                                    rectangle:self.pos[0],self.pos[1],self.size[0],self.size[1]
+                                Color:
+                                    rgba: 0.7, 0.7, 0.7, 1
+                                Rectangle:
+                                    pos:self.pos
+                                    size:self.size
+                            BoxLayout:
+                                size_hint_x:1
+                                size_hint_y:None
+                                height:25
+                                canvas:
+                                    Color:
+                                        rgba: 0,0,0,1
+                                    Line:
+                                        rectangle:self.pos[0],self.pos[1],self.size[0],self.size[1]
+                                    Color:
+                                        rgba: 0.6, 0, 0, 1
+                                    Rectangle:
+                                        pos:self.pos
+                                        size:self.size
+                                ULabel:
+                                    color:1,1,1,1
+                                    text:"Valve"
+                                    halign:"center"
+                            SValve:
+                                id:valve
+
+
+
+
+
+
+

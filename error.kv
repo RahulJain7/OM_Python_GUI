@@ -1,0 +1,39 @@
+<Error>:
+    size_hint:0.6,0.2
+    auto_dismiss: True
+    pos_hint:{'center_x':0.5,'center_y':0.5}
+
+    GridLayout:
+        size_hint:1,1
+        cols:1
+        BoxLayout:
+            size_hint_y:None
+            height:25
+            padding:5
+            canvas:
+                Color:
+                    rgba: 0,0,0,1
+                Line:
+                    rectangle:self.pos[0],self.pos[1],self.size[0],self.size[1]
+                Color:
+                    rgba: 0.6, 0, 0, 1
+                Rectangle:
+                    pos:self.pos
+                    size:self.size
+            Label:
+                size_hint_y:None
+                height:25
+                text_size: self.size
+                text:"Error"
+                halign:"center"
+                color:1,1,1,1
+        GridLayout:
+            padding:15
+            cols:1
+            GridLayout:
+                cols:2
+                Label:
+                    id:error_message
+                    font_size: 15
+
+
