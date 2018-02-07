@@ -29,7 +29,7 @@ from kivy.graphics.context_instructions import Color
 from kivy.graphics.instructions import InstructionGroup
 from kivy.lang import Builder
 from kivy.uix.dropdown import DropDown
-from url import OmWidget
+from main import OmWidget
 from kivy.factory import Factory
 from kivy.uix.checkbox import CheckBox
 from kivy.uix.modalview import ModalView
