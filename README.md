@@ -8,11 +8,11 @@ Requirements
 4. Garden-Graph: garden install graph
 
 Installation
->> git clone https://github.com/RahulJain7/OM_Python_GUI.git
+git clone https://github.com/RahulJain7/OM_Python_GUI.git
 
 Run:
->> cd OM_Python_GUI
->> python main.py
+1. cd OM_Python_GUI
+2. python main.py
 
 
 
