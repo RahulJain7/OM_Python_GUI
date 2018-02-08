@@ -1,5 +1,5 @@
 # OM_Python_GUI
-Gui wrapper developed in for chemical process simulation with Openmodelica as a simulation engine
+Gui wrapper developed for chemical process simulation with Openmodelica as a simulation engine
 
 Requirements
 1. Kivy: pip install kivy
