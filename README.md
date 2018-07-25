@@ -16,6 +16,6 @@ Run:
 1. cd OM_Python_GUI
 2. python main.py
 
-![Screenshot](OM_simulator.png)
+![myimage-alt-tag](https://github.com/RahulJain7/OM_Python_GUI/edit/master/OM_simulator.png)
 
 
